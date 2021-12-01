@@ -12,13 +12,22 @@ readData =
         ReadMode
         ( \handle -> do
             contents <- hGetContents handle
-            print $ countLarger contents
+            print $ sumRunningLarge $ toArrayWithWindow $ toArray contents
         )
+
+
+toArray :: String -> [Int]
+toArray contentStr =
+    map read $ lines contentStr
+
+
+toArrayWithWindow :: [Int] -> [Int]
+toArrayWithWindow arr = zipWith (+) arr (zipWith (+) (tail arr) $ tail (tail arr))
 
 
 countLarger :: String -> Int
 countLarger content =
-    sumRunningLarge . map read $ lines content
+    sumRunningLarge $ toArray content
 
 
 sumRunningLarge :: [Int] -> Int
