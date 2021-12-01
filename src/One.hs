@@ -1,19 +1,9 @@
 module One (
-    readData,
+    onePartOne,
+    onePartTwo,
 ) where
 
 import System.IO (IOMode (ReadMode), hGetContents, withFile)
-
-
-readData :: IO ()
-readData =
-    withFile
-        "resources/day_1/input.txt"
-        ReadMode
-        ( \handle -> do
-            contents <- hGetContents handle
-            print $ sumRunningLarge $ toArrayWithWindow $ toArray contents
-        )
 
 
 toArray :: String -> [Int]
@@ -32,7 +22,15 @@ countLarger content =
 
 sumRunningLarge :: [Int] -> Int
 sumRunningLarge [] = 0
-sumRunningLarge [x] = 0
+sumRunningLarge [_] = 0
 sumRunningLarge (x : xs)
     | x < head xs = 1 + sumRunningLarge xs
     | otherwise = sumRunningLarge xs
+
+
+onePartOne :: String -> Int
+onePartOne = sumRunningLarge . toArray
+
+
+onePartTwo :: String -> Int
+onePartTwo = sumRunningLarge . toArrayWithWindow . toArray

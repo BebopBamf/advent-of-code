@@ -1,6 +1,7 @@
 module Main where
 
-import Lib (runCode)
+import Lib (ChallengeReference (..), runCode)
+
 
 main :: IO ()
-main = runCode
+main = runCode DayOnePartOne
