@@ -4,7 +4,7 @@ module Lib (
 ) where
 
 import One (onePartOne, onePartTwo)
-import Two (twoPartOne)
+import Two (twoPartOne, twoPartTwo)
 
 import System.IO (IOMode (ReadMode), hGetContents, withFile)
 
@@ -13,14 +13,14 @@ data ChallengeReference
     = DayOnePartOne
     | DayOnePartTwo
     | DayTwoPartOne
+    | DayTwoPartTwo
 
-
---    | DayTwoPartTwo
 
 runCode :: ChallengeReference -> IO ()
 runCode DayOnePartOne = printResult onePartOne "resources/day_1/input.txt"
 runCode DayOnePartTwo = printResult onePartTwo "resources/day_1/input.txt"
 runCode DayTwoPartOne = printResult twoPartOne "resources/day_2/input.txt"
+runCode DayTwoPartTwo = printResult twoPartTwo "resources/day_2/input.txt"
 
 
 -- runCode DayOnePartTwo = printResult onePartTwo "resources/day_1/input.txt"

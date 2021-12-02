@@ -1,6 +1,4 @@
-{-# OPTIONS_GHC -Wno-overlapping-patterns #-}
-
-module Two (twoPartOne) where
+module Two (twoPartOne, twoPartTwo) where
 
 
 data DiveReference
@@ -10,12 +8,24 @@ data DiveReference
     | Other
 
 
+data DiveValues = DiveValues
+    { aim :: Int
+    , depth :: Int
+    , horizontalPosition :: Int
+    }
+    deriving (Show)
+
+
+initialDiveValue :: DiveValues
+initialDiveValue = DiveValues 0 0 0
+
+
 twoPartOne :: String -> Int
-twoPartOne input =
-    let diveRef = parseToReferenceList input
-        depth = getDepth diveRef
-        horPos = getHorizontalPos diveRef
-     in depth * horPos
+twoPartOne = diveValueToInt . foldl toDiveValueOne initialDiveValue . parseToReferenceList
+
+
+twoPartTwo :: String -> Int
+twoPartTwo = diveValueToInt . foldl toDiveValueTwo initialDiveValue . parseToReferenceList
 
 
 parseToReferenceList :: String -> [DiveReference]
@@ -29,20 +39,19 @@ parseDiveRefVal "down" s = Down $ read s
 parseDiveRefVal _ _ = Other
 
 
-getDepthVal :: DiveReference -> Int
-getDepthVal (Up x) = - x
-getDepthVal (Down x) = x
-getDepthVal _ = 0
+toDiveValueOne :: DiveValues -> DiveReference -> DiveValues
+toDiveValueOne state (Forward x) = state {horizontalPosition = horizontalPosition state + x}
+toDiveValueOne state (Up x) = state {depth = depth state - x}
+toDiveValueOne state (Down x) = state {depth = depth state + x}
+toDiveValueOne state Other = state
 
 
-getDepth :: [DiveReference] -> Int
-getDepth = sum . map getDepthVal
+toDiveValueTwo :: DiveValues -> DiveReference -> DiveValues
+toDiveValueTwo state (Forward x) = state {horizontalPosition = horizontalPosition state + x, depth = depth state + (aim state * x)}
+toDiveValueTwo state (Up x) = state {aim = aim state - x}
+toDiveValueTwo state (Down x) = state {aim = aim state + x}
+toDiveValueTwo state Other = state
 
 
-getHorizontalPosVal :: DiveReference -> Int
-getHorizontalPosVal (Forward x) = x
-getHorizontalPosVal _ = 0
-
-
-getHorizontalPos :: [DiveReference] -> Int
-getHorizontalPos = sum . map getHorizontalPosVal
+diveValueToInt :: DiveValues -> Int
+diveValueToInt DiveValues {horizontalPosition = h, depth = d} = h * d

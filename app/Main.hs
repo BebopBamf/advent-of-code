@@ -4,4 +4,4 @@ import Lib (ChallengeReference (..), runCode)
 
 
 main :: IO ()
-main = runCode DayTwoPartOne
+main = runCode DayTwoPartTwo
